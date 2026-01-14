@@ -1,0 +1,173 @@
+export interface Product {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  images: string[];
+  category: string;
+  sizes: number[];
+  colors: string[];
+  description: string;
+  features: string[];
+  inStock: boolean;
+  isNew?: boolean;
+  isFeatured?: boolean;
+}
+
+export const products: Product[] = [
+  {
+    id: "1",
+    name: "Air Max 90",
+    brand: "Nike",
+    price: 150,
+    originalPrice: 180,
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80",
+      "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80",
+      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=800&q=80"
+    ],
+    category: "Running",
+    sizes: [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12],
+    colors: ["White", "Black", "Red"],
+    description: "The Nike Air Max 90 stays true to its OG running roots with the iconic Waffle outsole, stitched overlays and classic TPU details. Classic colors celebrate your fresh look while Max Air cushioning adds comfort to your journey.",
+    features: ["Max Air cushioning", "Waffle outsole", "Leather and textile upper", "Rubber outsole"],
+    inStock: true,
+    isNew: true,
+    isFeatured: true
+  },
+  {
+    id: "2",
+    name: "Yeezy Boost 350 V2",
+    brand: "Adidas",
+    price: 230,
+    image: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=800&q=80",
+      "https://images.unsplash.com/photo-1584735175315-9d5df23860e6?w=800&q=80"
+    ],
+    category: "Lifestyle",
+    sizes: [6, 7, 8, 9, 10, 11, 12, 13],
+    colors: ["Zebra", "Black", "Cream"],
+    description: "The Adidas Yeezy Boost 350 V2 features an upper composed of re-engineered Primeknit. The post-dyed monofilament side stripe is woven into the upper. The midsole utilizes adidas' innovative BOOST™ technology.",
+    features: ["Primeknit upper", "BOOST cushioning", "Rubber outsole", "Reflective details"],
+    inStock: true,
+    isFeatured: true
+  },
+  {
+    id: "3",
+    name: "Jordan 1 Retro High OG",
+    brand: "Jordan",
+    price: 180,
+    image: "https://images.unsplash.com/photo-1597045566677-8cf032ed6634?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1597045566677-8cf032ed6634?w=800&q=80",
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&q=80"
+    ],
+    category: "Basketball",
+    sizes: [7, 8, 9, 10, 11, 12, 13, 14],
+    colors: ["Chicago", "Royal", "Shadow"],
+    description: "The Air Jordan 1 Retro High OG returns with a fresh look that celebrates the shoe's legacy. Premium leather in the upper provides a quality look and feel, while Nike Air cushioning offers lightweight, all-day comfort.",
+    features: ["Genuine leather upper", "Nike Air cushioning", "Rubber cupsole", "Perforated toe box"],
+    inStock: true,
+    isNew: true
+  },
+  {
+    id: "4",
+    name: "New Balance 550",
+    brand: "New Balance",
+    price: 130,
+    image: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&q=80",
+      "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&q=80"
+    ],
+    category: "Lifestyle",
+    sizes: [6, 7, 8, 9, 10, 11, 12],
+    colors: ["White/Green", "White/Navy", "White/Red"],
+    description: "Originally released in 1989 and revived for today's style-focused sneaker enthusiasts, the 550 was a sleeper hit that's now taking center stage. The 550 keeps things simple with leather and synthetic upper materials.",
+    features: ["Leather upper", "Perforated toe", "Rubber outsole", "Padded collar"],
+    inStock: true
+  },
+  {
+    id: "5",
+    name: "Dunk Low Panda",
+    brand: "Nike",
+    price: 110,
+    originalPrice: 130,
+    image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800&q=80",
+      "https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=800&q=80"
+    ],
+    category: "Skateboarding",
+    sizes: [6, 7, 7.5, 8, 8.5, 9, 9.5, 10, 11, 12],
+    colors: ["Black/White", "Grey Fog", "Team Green"],
+    description: "Created for the hardwood but taken to the streets, the Nike Dunk Low features a classic design with bold color blocking. This version features crisp leather construction in a bold black and white colorway.",
+    features: ["Leather upper", "Foam midsole", "Rubber outsole", "Padded collar"],
+    inStock: true,
+    isFeatured: true
+  },
+  {
+    id: "6",
+    name: "Ultra Boost 22",
+    brand: "Adidas",
+    price: 190,
+    image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&q=80",
+      "https://images.unsplash.com/photo-1606890658317-7d14490b76fd?w=800&q=80"
+    ],
+    category: "Running",
+    sizes: [7, 8, 9, 10, 11, 12, 13],
+    colors: ["Core Black", "Cloud White", "Solar Red"],
+    description: "Experience epic energy with every step in the Ultraboost 22. These running shoes have a supportive knit upper hugs your foot, while responsive BOOST cushioning creates a smooth, energised ride.",
+    features: ["Primeknit+ upper", "BOOST midsole", "Continental rubber outsole", "Linear Energy Push"],
+    inStock: true
+  },
+  {
+    id: "7",
+    name: "Chuck Taylor All Star 70",
+    brand: "Converse",
+    price: 85,
+    image: "https://images.unsplash.com/photo-1463100099107-aa0980c362e6?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1463100099107-aa0980c362e6?w=800&q=80"
+    ],
+    category: "Lifestyle",
+    sizes: [5, 6, 7, 8, 9, 10, 11, 12, 13],
+    colors: ["Black", "Parchment", "Sunflower"],
+    description: "The Chuck 70 is a premium update of the original Chuck Taylor All Star. It features a higher rubber foxing, more cushioning, and a glossy finish for a refined, vintage look.",
+    features: ["Canvas upper", "OrthoLite cushioning", "Rubber outsole", "Vintage styling"],
+    inStock: true
+  },
+  {
+    id: "8",
+    name: "Air Force 1 '07",
+    brand: "Nike",
+    price: 115,
+    image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&q=80",
+      "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=800&q=80"
+    ],
+    category: "Lifestyle",
+    sizes: [6, 7, 8, 9, 10, 11, 12, 13, 14],
+    colors: ["White", "Black", "Sail"],
+    description: "The radiance lives on in the Nike Air Force 1 '07. This icon of hoops culture puts a fresh spin on what you know best: crisp leather, bold colors and the perfect amount of flash.",
+    features: ["Full-grain leather upper", "Nike Air cushioning", "Non-marking rubber outsole", "Perforated toe box"],
+    inStock: true,
+    isFeatured: true
+  }
+];
+
+export const brands = ["Nike", "Adidas", "Jordan", "New Balance", "Converse"];
+export const categories = ["Running", "Lifestyle", "Basketball", "Skateboarding"];
+export const priceRanges = [
+  { label: "Under $100", min: 0, max: 100 },
+  { label: "$100 - $150", min: 100, max: 150 },
+  { label: "$150 - $200", min: 150, max: 200 },
+  { label: "Over $200", min: 200, max: Infinity }
+];
