@@ -17,7 +17,12 @@ const app = express();
 connectDB();
 
 app.use(helmet());
-app.use(cors({ origin: 'http://localhost:8080' })); 
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN,
+    credentials: true, 
+  })
+);
 app.use(express.json());
 
 // Rate limiting
