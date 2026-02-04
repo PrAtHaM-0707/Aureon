@@ -1,10 +1,9 @@
 // src/context/CartContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import { Product } from '@/context/ProductContext';
 import { toast } from '@/hooks/use-toast';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+import { AxiosError } from 'axios';
 
 export interface CartItem {
   product: Product;
@@ -31,12 +30,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/cart`);
+      const res = await api.get('/cart');
       setItems(res.data.cart || []);
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status !== 401) {
+      if (err instanceof AxiosError && err.response?.status !== 401) {
         console.error('Failed to fetch cart', err);
-        toast({ title: "Error", description: "Failed to load cart", variant: "destructive" });
       }
       setItems([]);
     } finally {
@@ -50,7 +48,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addToCart = async (product: Product, size: number, quantity = 1) => {
     try {
-      const res = await axios.post(`${API_BASE}/cart`, {
+      const res = await api.post('/cart', {
         productId: product._id,
         size,
         quantity
@@ -58,13 +56,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setItems(res.data.cart);
       toast({ title: "Added to cart", description: `${product.name} (Size ${size})` });
     } catch (err) {
-      toast({ title: "Error", description: "Failed to add to cart", variant: "destructive" });
+      toast({ title: "Error", description: "Login required to add to cart", variant: "destructive" });
     }
   };
 
   const removeFromCart = async (productId: string, size: number) => {
     try {
-      const res = await axios.delete(`${API_BASE}/cart/${productId}`, { data: { size } });
+      const res = await api.delete(`/cart/${productId}`, { data: { size } });
       setItems(res.data.cart);
       toast({ title: "Removed", description: "Item removed from cart" });
     } catch (err) {
@@ -74,7 +72,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateQuantity = async (productId: string, size: number, quantity: number) => {
     try {
-      const res = await axios.put(`${API_BASE}/cart/${productId}`, { size, quantity });
+      const res = await api.put(`/cart/${productId}`, { size, quantity });
       setItems(res.data.cart);
     } catch (err) {
       toast({ title: "Error", description: "Failed to update quantity", variant: "destructive" });
@@ -83,7 +81,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearCart = async () => {
     try {
-      await axios.delete(`${API_BASE}/cart`);
+      await api.delete('/cart');
       setItems([]);
       toast({ title: "Cart cleared" });
     } catch (err) {

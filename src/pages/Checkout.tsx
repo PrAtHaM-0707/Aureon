@@ -8,9 +8,8 @@ import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRazorpay } from '@/hooks/useRazorpay';
 import { toast } from '@/hooks/use-toast';
-import axios, { AxiosError } from 'axios';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+import api from '@/lib/api';
+import { AxiosError } from 'axios';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -46,7 +45,7 @@ const Checkout = () => {
 
     setIsProcessing(true);
     try {
-      const orderRes = await axios.post(`${API_BASE}/orders`, {
+      const orderRes = await api.post('/orders', {
         items: items.map(item => ({
           productId: item.product._id,
           name: item.product.name,
@@ -62,7 +61,7 @@ const Checkout = () => {
 
       const order = orderRes.data.order;
 
-      const rzpRes = await axios.post(`${API_BASE}/orders/create-razorpay`, {
+      const rzpRes = await api.post('/orders/create-razorpay', {
         amount: total
       });
 
@@ -83,7 +82,7 @@ const Checkout = () => {
       });
 
       if (result.success) {
-        await axios.patch(`${API_BASE}/orders/${order._id}/payment`, {
+        await api.patch(`/orders/${order._id}/payment`, {
           paymentId: result.paymentId
         });
 

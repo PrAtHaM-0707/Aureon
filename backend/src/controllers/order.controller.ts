@@ -3,6 +3,7 @@ import Order from '../models/Order.model';
 import Product from '../models/Product.model';
 import User from '../models/User.model';
 import Razorpay from 'razorpay';
+import logger from '../utils/logger.js';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,
@@ -38,7 +39,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
     res.status(201).json({ success: true, order });
   } catch (err) {
-    console.error(err);
+    logger.error(`Create Order Error: ${err}`);
     res.status(500).json({ message: 'Server error' });
   }
 };

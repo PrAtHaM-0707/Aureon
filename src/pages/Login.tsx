@@ -5,22 +5,42 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
-
     try {
-      await login(formData.email, formData.password);
+      await login(data.email, data.password);
       toast({
         title: "Welcome back!",
         description: "You've successfully signed in."
@@ -47,51 +67,55 @@ const Login = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium">Password</label>
-              <Link
-                to="/forgot-password"
-                className="text-sm text-muted-foreground hover:text-foreground underline underline-offset-4"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <Input
-              type="password"
-              placeholder="Enter your password"
-              required
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="Enter your password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Signing in..." : "Sign In"}
+            </Button>
+          </form>
+        </Form>
+
+        <div className="mt-6 text-center text-sm">
+          <p className="text-muted-foreground">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-primary font-medium hover:underline">
+              Sign up
+            </Link>
+          </p>
+          <div className="mt-2">
+            <Link to="/forgot-password" className="text-muted-foreground hover:text-primary transition-colors">
+              Forgot password?
+            </Link>
           </div>
-
-          <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-            {isLoading ? 'Signing in...' : 'Sign In'}
-          </Button>
-        </form>
-
-        <p className="text-center text-sm text-muted-foreground mt-8">
-          Don't have an account?{' '}
-          <Link
-            to="/signup"
-            className="text-foreground underline underline-offset-4 hover:text-muted-foreground"
-          >
-            Create one
-          </Link>
-        </p>
+        </div>
       </div>
     </Layout>
   );

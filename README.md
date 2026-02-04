@@ -62,6 +62,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 
 - Node.js (v16 or higher)
 - MongoDB database
+- Redis (Upstash)
 - Razorpay account for payments
 - npm or yarn package manager
 

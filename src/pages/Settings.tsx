@@ -15,10 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import axios, { AxiosError } from "axios";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+import api from "@/lib/api";
+import { AxiosError } from "axios";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -76,7 +74,7 @@ const Settings = () => {
     }
 
     try {
-      await axios.patch(`${API_BASE_URL}/auth/change-password`, {
+      await api.patch('/auth/change-password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       });
@@ -109,7 +107,7 @@ const Settings = () => {
       )
     ) {
       try {
-        await axios.delete(`${API_BASE_URL}/auth/delete-account`);
+        await api.delete('/auth/delete-account');
         logout();
         toast({
           title: "Account deleted",

@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import User from '../models/User.model';
 import Product from '../models/Product.model';
+import logger from '../utils/logger.js';
 
 export const getCart = async (req: Request, res: Response) => {
   try {
@@ -10,6 +11,7 @@ export const getCart = async (req: Request, res: Response) => {
 
     res.json({ success: true, cart: user.cart });
   } catch (err) {
+    logger.error(`Get Cart Error: ${err}`);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -68,6 +70,7 @@ export const updateCartItem = async (req: Request, res: Response) => {
 
     res.json({ success: true, cart: user.cart });
   } catch (err) {
+    logger.error(`Update Cart Error: ${err}`);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -89,6 +92,7 @@ export const removeFromCart = async (req: Request, res: Response) => {
 
     res.json({ success: true, cart: user.cart });
   } catch (err) {
+    logger.error(`Remove from Cart Error: ${err}`);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -103,6 +107,7 @@ export const clearCart = async (req: Request, res: Response) => {
 
     res.json({ success: true, cart: [] });
   } catch (err) {
+    logger.error(`Clear Cart Error: ${err}`);
     res.status(500).json({ message: 'Server error' });
   }
 };

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 interface User {
   _id: string;
@@ -49,8 +49,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/orders`);
-      setOrders(res.data.orders || []);
+      const { data } = await api.get('/orders');
+      setOrders(data.orders || []);
     } catch (err) {
       console.error('Failed to fetch orders:', err);
       setOrders([]);
@@ -60,20 +60,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Load user on app start
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      axios.get(`${API_BASE_URL}/auth/me`)
-        .then(res => {
-          setUser(res.data.user);
-        })
-        .catch(() => {
-          localStorage.removeItem('token');
-          delete axios.defaults.headers.common['Authorization'];
-        })
-        .finally(() => setLoading(false));
-    } else {
+    if (!token) {
       setLoading(false);
+      return;
     }
+
+    const checkAuth = async () => {
+      try {
+        const { data } = await api.get('/auth/me');
+        setUser(data.user);
+      } catch (error) {
+        localStorage.removeItem('token');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    checkAuth();
   }, []);
 
   // Fetch orders whenever user changes (login, signup, refresh, etc.)
@@ -87,10 +90,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
-      const { token, user: userData } = res.data;
+      const { data } = await api.post('/auth/login', { email, password });
+      const { token, user: userData } = data;
       localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(userData);
       // fetchOrders will be triggered by useEffect above
     } catch (err: unknown) {
@@ -101,15 +103,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signup = async (email: string, password: string, firstName: string, lastName: string) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/auth/register`, {
+      const { data } = await api.post('/auth/register', {
         email,
         password,
         firstName,
         lastName,
       });
-      const { token, user: userData } = res.data;
+      const { token, user: userData } = data;
       localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(userData);
       // fetchOrders will be triggered by useEffect
     } catch (err: unknown) {
@@ -120,7 +121,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     localStorage.removeItem('token');
-    delete axios.defaults.headers.common['Authorization'];
     setUser(null);
     setOrders([]);
   };
@@ -133,8 +133,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addOrder = async (orderData: Omit<Order, '_id' | 'date'>) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/orders`, orderData);
-      const newOrder = res.data.order;
+      const { data } = await api.post('/orders', orderData);
+      const newOrder = data.order;
 
       // Refetch all orders to ensure fresh, consistent data from DB
       await fetchOrders();

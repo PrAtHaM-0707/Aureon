@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import logger from './logger.js';
 
 interface CustomError extends Error {
   statusCode?: number;
@@ -14,6 +15,9 @@ export const errorHandler = (
 ) => {
   let error = { ...err };
   error.message = err.message;
+  
+  // Log the original error
+  logger.error(err.message);
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {

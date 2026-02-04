@@ -10,31 +10,11 @@ const generateToken = (id: string) => {
   });
 };
 
-// Email validation helper
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
 export const register = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
-    if (!firstName || !lastName || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    if (!isValidEmail(email)) {
-      return res
-        .status(400)
-        .json({ message: "Please provide a valid email address" });
-    }
-
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters" });
-    }
+    // Validation is now handled by Zod middleware
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
@@ -70,15 +50,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ message: "Email and password required" });
-    }
-
-    if (!isValidEmail(email)) {
-      return res
-        .status(400)
-        .json({ message: "Please provide a valid email address" });
-    }
+    // Validation handled by Zod middleware
 
     const user = await User.findOne({ email: email.toLowerCase() }).select(
       "+password"

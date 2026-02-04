@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 interface RegisteredUser {
   _id: string;
@@ -93,10 +91,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setLoading(true);
     try {
       const [statsRes, usersRes, ordersRes, productsRes] = await Promise.all([
-        axios.get(`${API_BASE}/admin/stats`),
-        axios.get(`${API_BASE}/admin/users`),
-        axios.get(`${API_BASE}/admin/orders`),
-        axios.get(`${API_BASE}/products`),
+        api.get('/admin/stats'),
+        api.get('/admin/users'),
+        api.get('/admin/orders'),
+        api.get('/products'),
       ]);
 
       setStats(statsRes.data.stats);
@@ -116,7 +114,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const updateOrderStatus = async (orderId: string, status: AdminOrder['status']) => {
   try {
-    await axios.patch(`${API_BASE}/orders/${orderId}/status`, { status });
+    await api.patch(`/orders/${orderId}/status`, { status });
     setOrders(prev => prev.map(o => o.orderId === orderId ? { ...o, status } : o));
   } catch (err) {
     console.error('Failed to update order status', err);
@@ -126,7 +124,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const updateUserRole = async (userId: string, role: 'user' | 'admin') => {
     try {
-      await axios.patch(`${API_BASE}/admin/users/${userId}/role`, { role });
+      await api.patch(`/admin/users/${userId}/role`, { role });
       setUsers(prev => prev.map(u => u._id === userId ? { ...u, role } : u));
     } catch (err) {
       console.error('Failed to update user role', err);
@@ -135,7 +133,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const deleteUser = async (userId: string) => {
     try {
-      await axios.delete(`${API_BASE}/admin/users/${userId}`);
+      await api.delete(`/admin/users/${userId}`);
       setUsers(prev => prev.filter(u => u._id !== userId));
     } catch (err) {
       console.error('Failed to delete user', err);

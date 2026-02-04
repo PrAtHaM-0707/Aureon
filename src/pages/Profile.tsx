@@ -6,10 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import axios from "axios";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+import api from "@/lib/api";
+import { AxiosError } from "axios";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -52,7 +50,7 @@ const Profile = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.patch(`${API_BASE_URL}/auth/update-profile`, {
+      const res = await api.patch('/auth/update-profile', {
         firstName: formData.firstName,
         lastName: formData.lastName,
       });
@@ -68,7 +66,7 @@ const Profile = () => {
     } catch (err: unknown) {
       let message = "Failed to update profile";
 
-      if (axios.isAxiosError(err)) {
+      if (err instanceof AxiosError) {
         message = err.response?.data?.message || message;
       }
 
