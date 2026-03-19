@@ -26,9 +26,11 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - 🎨 **Modern UI**: Built with ShadCN UI components and Radix UI
 - 🔄 **Real-time Updates**: React Query for efficient data fetching
 - 🛡️ **Security**: Helmet, CORS, rate limiting, input validation
+- 🚀 **Performance Optimization**: Redis (Upstash) caching implemented for scale
+- ⚙️ **Reliability**: Automated keep-alive health endpoints for scalable deployments
 - 📊 **Data Visualization**: Charts and analytics with Recharts
 - 🔧 **Type Safety**: Full TypeScript implementation
-- 🚀 **Performance**: Vite for fast development and building
+- ⚡ **Build Tool**: Vite for fast development and building
 
 ## 🛠️ Tech Stack
 
@@ -51,6 +53,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - **TypeScript** - Type-safe server code
 - **MongoDB** - NoSQL database
 - **Mongoose** - MongoDB object modeling
+- **Redis (Upstash)** - Caching and performance optimization
 - **JWT** - Authentication tokens
 - **bcryptjs** - Password hashing
 - **Razorpay** - Payment gateway integration
@@ -64,7 +67,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - MongoDB database
 - Redis (Upstash)
 - Razorpay account for payments
-- npm or yarn package manager
+- `npm` or `yarn` package manager
 
 ## 🚀 Getting Started
 
@@ -78,28 +81,28 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 
 2. **Install Frontend Dependencies**
    ```bash
+   cd frontend
    npm install
    ```
 
 3. **Install Backend Dependencies**
    ```bash
-   cd backend
+   cd ../backend
    npm install
-   cd ..
    ```
 
 ### Environment Setup
 
 1. **Frontend Environment Variables**
-   Create `.env` file in the root directory:
-   ```
+   Create a `.env` file in the `frontend` directory:
+   ```env
    VITE_API_URL=http://localhost:5000/api
    VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
    ```
 
 2. **Backend Environment Variables**
-   Create `.env` file in the `backend` directory:
-   ```
+   Create a `.env` file in the `backend` directory:
+   ```env
    PORT=5000
    MONGODB_URI=mongodb://localhost:27017/aureon
    JWT_SECRET=your_jwt_secret_key
@@ -111,7 +114,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 ### Database Setup
 
 1. **Start MongoDB**
-   Make sure MongoDB is running on your system
+   Make sure MongoDB is running on your system.
 
 2. **Seed the Database**
    ```bash
@@ -121,6 +124,8 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 
 ### Running the Application
 
+Open two separate terminals from the root project directory:
+
 1. **Start the Backend Server**
    ```bash
    cd backend
@@ -129,13 +134,13 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 
 2. **Start the Frontend Development Server**
    ```bash
-   # In a new terminal, from the root directory
+   cd frontend
    npm run dev
    ```
 
 The application will be available at:
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:5000/api
+- **Frontend:** http://localhost:5173
+- **Backend API:** http://localhost:5000/api
 
 ## 📡 API Endpoints
 
@@ -169,98 +174,68 @@ The application will be available at:
 - `GET /api/admin/orders` - Get all orders
 - `PUT /api/admin/orders/:id` - Update order status
 
+### System
+- `GET /api/health` - Server keep-alive health check
+
 ## 🏗️ Project Structure
 
-```
+```text
 Aureon/
-├── backend/
+├── .gitignore
+├── README.md
+├── backend/                    # Node.js Express Server
 │   ├── src/
-│   │   ├── config/
-│   │   │   └── db.ts              # Database connection
-│   │   ├── controllers/
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── product.controller.ts
-│   │   │   ├── order.controller.ts
-│   │   │   ├── cart.controller.ts
-│   │   │   └── admin.controller.ts
-│   │   ├── middleware/
-│   │   │   └── auth.middleware.ts # JWT authentication
-│   │   ├── models/
-│   │   │   ├── User.model.ts
-│   │   │   ├── Product.model.ts
-│   │   │   └── Order.model.ts
-│   │   ├── routes/
-│   │   │   ├── auth.routes.ts
-│   │   │   ├── product.routes.ts
-│   │   │   ├── order.routes.ts
-│   │   │   ├── cart.routes.ts
-│   │   │   └── admin.routes.ts
-│   │   ├── utils/
-│   │   │   └── errorHandler.ts
-│   │   ├── server.ts               # Main server file
-│   │   ├── seed.ts                 # Database seeding
-│   │   └── test-auth.ts            # Auth testing
+│   │   ├── config/             # DB & Redis configurations
+│   │   ├── controllers/        # Route controllers
+│   │   ├── middleware/         # Auth, validation middlewares
+│   │   ├── models/             # Mongoose schemas
+│   │   ├── routes/             # API routes
+│   │   ├── schemas/            # Validation schemas
+│   │   ├── services/           # Business logic & Caching
+│   │   ├── types/              # TypeScript definitions
+│   │   ├── utils/              # Error handling & logging
+│   │   ├── server.ts           # Entry point
+│   │   └── seed.ts             # Database seeding script
 │   ├── package.json
 │   └── tsconfig.json
-├── src/
-│   ├── components/
-│   │   ├── ui/                     # ShadCN UI components
-│   │   ├── layout/                 # Layout components
-│   │   ├── product/                # Product components
-│   │   └── admin/                  # Admin components
-│   ├── context/                    # React contexts
-│   │   ├── AuthContext.tsx
-│   │   ├── CartContext.tsx
-│   │   ├── ProductContext.tsx
-│   │   └── AdminContext.tsx
-│   ├── hooks/                      # Custom hooks
-│   ├── lib/                        # Utilities
-│   ├── pages/                      # Page components
-│   │   ├── Index.tsx
-│   │   ├── Shop.tsx
-│   │   ├── ProductDetail.tsx
-│   │   ├── Cart.tsx
-│   │   ├── Checkout.tsx
-│   │   ├── Orders.tsx
-│   │   ├── Login.tsx
-│   │   ├── Signup.tsx
-│   │   ├── Profile.tsx
-│   │   └── admin/                  # Admin pages
-│   ├── App.tsx
-│   └── main.tsx
-├── public/                         # Static assets
-├── package.json
-├── vite.config.ts
-├── tailwind.config.ts
-├── components.json                 # ShadCN config
-└── PAYMENT_LOGS.md                 # Payment testing logs
+└── frontend/                   # React + Vite Client
+    ├── public/                 # Static assets
+    ├── src/
+    │   ├── components/         # Reusable UI elements (ShadCN, layout)
+    │   ├── context/            # React Contexts (Auth, Cart, Admin)
+    │   ├── hooks/              # Custom React hooks
+    │   ├── lib/                # Util functions & API config
+    │   ├── pages/              # Application views & Admin dashboard
+    │   ├── App.tsx             # Root component
+    │   └── main.tsx            # React DOM render entry
+    ├── vercel.json             # Deployment routing
+    ├── components.json         # ShadCN config
+    ├── tailwind.config.ts      # Tailwind styling rules
+    ├── vite.config.ts          # Vite bundler config
+    ├── tsconfig.json           # TypeScript configuration
+    └── package.json
 ```
 
 ## 🔧 Available Scripts
 
-### Frontend
+### Frontend (in `./frontend`)
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
-- `npm run build:dev` - Build for development
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
-### Backend
+### Backend (in `./backend`)
 - `npm run dev` - Start development server with nodemon
 - `npm run build` - Build TypeScript to JavaScript
 - `npm run start` - Start production server
 - `npm run seed` - Seed database with sample data
-- `npm run test-auth` - Test authentication endpoints
 
 ## 💳 Payment Integration
 
 The application uses Razorpay for payment processing:
-
-1. **Frontend**: Razorpay checkout modal for secure payments
-2. **Backend**: Order creation and payment verification
-3. **Webhook**: Payment confirmation and order updates
-
-See `PAYMENT_LOGS.md` for detailed payment flow logs and debugging information.
+1. **Frontend**: Razorpay checkout modal for secure payments.
+2. **Backend**: Order creation and payment verification.
+3. **Logs**: Payment flow debugging information can be documented as needed.
 
 ## 🔐 Authentication
 
@@ -280,15 +255,16 @@ See `PAYMENT_LOGS.md` for detailed payment flow logs and debugging information.
 ## 🚀 Deployment
 
 ### Frontend (Vercel)
-1. Build the project: `npm run build`
-2. Deploy the `dist` folder to your hosting platform
-3. Set environment variables in the platform dashboard
+1. Set the root directory to `frontend`.
+2. Build command: `npm run build`
+3. Set environment variables in the platform dashboard.
 
 ### Backend (Render)
-1. Build the project: `npm run build`
-2. Deploy the `dist` folder or use the source code
-3. Set environment variables in the platform dashboard
-4. Ensure MongoDB connection is configured
+1. Set the root directory to `backend`.
+2. Start command: `npm run start`
+3. Set environment variables in the platform dashboard.
+4. Ensure MongoDB and Redis (Upstash) connections are configured.
+*(A stay-awake cron ping to `/api/health` is advised for Render free tiers).*
 
 ## 🤝 Contributing
 
@@ -301,10 +277,3 @@ See `PAYMENT_LOGS.md` for detailed payment flow logs and debugging information.
 ## 📝 License
 
 This project is licensed under the ISC License.
-
-## 🙏 Acknowledgments
-
-- Built with modern web technologies
-- UI components from ShadCN UI and Radix UI
-- Payment processing by Razorpay
-- Icons by Lucide React
